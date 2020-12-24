@@ -87,27 +87,6 @@ func (s NullPoint) MarshalJSON() ([]byte, error) {
 	return json.Marshal(s.Point)
 }
 
-// MarshalText implements encoding.TextMarshaler.
-func (s NullPoint) MarshalText() ([]byte, error) {
-	if !s.Valid {
-		return []byte{}, nil
-	}
-	return s.Point.MarshalText()
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *NullPoint) UnmarshalText(text []byte) error {
-	if text == nil || len(text) == 0 {
-		s.Valid = false
-		return nil
-	}
-
-	s.Point = Point{}
-	err := s.Point.UnmarshalText(text)
-	s.Valid = err == nil
-	return nil
-}
-
 // SetValid changes this NullPoint's value and also sets it to be non-null.
 func (s *NullPoint) SetValid(v Point) {
 	s.Point = v

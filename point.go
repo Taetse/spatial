@@ -50,19 +50,3 @@ func (p *Point) Scan(val interface{}) error {
 func (p Point) Value() (driver.Value, error) {
 	return p, nil
 }
-
-// MarshalText implements encoding.TextMarshaler.
-func (p Point) MarshalText() ([]byte, error) {
-	return []byte(fmt.Sprintf("SRID=4326;POINT(%v %v)", p.Lng, p.Lat)), nil
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *Point) UnmarshalText(text []byte) error {
-	if text == nil || len(text) == 0 {
-		return nil
-	}
-
-	*s = Point{}
-	err := s.Scan(text)
-	return err
-}
