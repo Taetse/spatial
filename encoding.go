@@ -13,7 +13,7 @@ func Decode(points string, precision int) ([]Point, error) {
 
 	factor := math.Pow10(precision)
 	input := bytes.NewBufferString(points)
-	path := []Point{}
+	var path []Point
 
 	for {
 		dlat, _ := decodeInt(input)

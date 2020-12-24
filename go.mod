@@ -1,4 +1,4 @@
-module github.com/dewski/spatial
+module github.com/Taetse/spatial
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
