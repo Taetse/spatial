@@ -92,7 +92,7 @@ func (s NullPoint) MarshalText() ([]byte, error) {
 	if !s.Valid {
 		return []byte{}, nil
 	}
-	return []byte(s.Point.String()), nil
+	return s.Point.MarshalText()
 }
 
 // UnmarshalText implements encoding.TextUnmarshaler.
@@ -103,7 +103,7 @@ func (s *NullPoint) UnmarshalText(text []byte) error {
 	}
 
 	s.Point = Point{}
-	err := s.Point.Scan(text)
+	err := s.Point.UnmarshalText(text)
 	s.Valid = err == nil
 	return nil
 }
