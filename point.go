@@ -36,7 +36,7 @@ func (p *Point) Scan(val interface{}) error {
 	case 1:
 		byteOrder = binary.LittleEndian
 	default:
-		return fmt.Errorf("Invalid byte order %d", wkbByteOrder)
+		return fmt.Errorf("invalid byte order %d", wkbByteOrder)
 	}
 
 	var wkbGeometryType uint64
@@ -55,35 +55,18 @@ func (p Point) Value() (driver.Value, error) {
 	return p.String(), nil
 }
 
-type NullPoint struct {
-	Point Point
-	Valid bool
+// MarshalText implements encoding.TextMarshaler.
+func (s Point) MarshalText() ([]byte, error) {
+	return []byte(s.String()), nil
 }
 
-func (np *NullPoint) Scan(val interface{}) error {
-	if val == nil {
-		np.Point, np.Valid = Point{}, false
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *Point) UnmarshalText(text []byte) error {
+	if text == nil || len(text) == 0 {
 		return nil
 	}
 
-	point := &Point{}
-	err := point.Scan(val)
-	if err != nil {
-		np.Point, np.Valid = Point{}, false
-		return nil
-	}
-	np.Point = Point{
-		Lat: point.Lat,
-		Lng: point.Lng,
-	}
-	np.Valid = true
-
-	return nil
-}
-
-func (np NullPoint) Value() (driver.Value, error) {
-	if !np.Valid {
-		return nil, nil
-	}
-	return np.Point, nil
+	*s = Point{}
+	err := s.Scan(text)
+	return err
 }
