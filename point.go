@@ -14,6 +14,10 @@ type Point struct {
 	Lat float64 `json:"lat"`
 }
 
+func (p *Point) DbValue() string {
+	return fmt.Sprintf("SRID=4326;POINT(%v %v)", p.Lng, p.Lat)
+}
+
 func (p *Point) Scan(val interface{}) error {
 	b, err := hex.DecodeString(string(val.([]uint8)))
 	if err != nil {
@@ -48,5 +52,5 @@ func (p *Point) Scan(val interface{}) error {
 }
 
 func (p Point) Value() (driver.Value, error) {
-	return p, nil
+	return p.DbValue(), nil
 }
